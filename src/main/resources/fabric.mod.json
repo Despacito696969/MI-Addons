@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "mi_addons",
+  "version": "${version}",
+  "name": "MI Addons",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/User/MI Addons"
+  },
+  "license": "MIT",
+  "icon": "assets/mi_addons/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "org.despacito696969.mi_addons.client.MIAddonsClient"
+    ],
+    "main": [
+      "org.despacito696969.mi_addons.MIAddons"
+    ],
+    "modmenu": [
+      "org.despacito696969.mi_addons.MIAddonsModMenu"
+    ]
+  },
+  "mixins": [
+    "mi_addons.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

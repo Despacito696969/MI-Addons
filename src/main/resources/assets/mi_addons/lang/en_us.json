@@ -1,0 +1,15 @@
+{
+  "text.autoconfig.mi_addons.title": "Modern Industrialization Addons Config",
+  "text.autoconfig.mi_addons.category.default": "Overclock Rework",
+  "text.autoconfig.mi_addons.category.steam_mining_drill": "Steam Mining Drill",
+  "text.autoconfig.mi_addons.category.other": "Other",
+
+  "text.autoconfig.mi_addons.option.overclock_rework": "Overclock rework (requires restart)",
+  "text.autoconfig.mi_addons.option.overclock_loss": "Overclock loss",
+  "text.autoconfig.mi_addons.option.overclock_gain": "Overclock gain",
+
+  "text.autoconfig.mi_addons.option.steam_drill_speed": "Steam Mining Drill Speed",
+  "text.autoconfig.mi_addons.option.steam_drill_level": "Steam Mining Drill Mining Level",
+
+  "text.autoconfig.mi_addons.option.rei_multiblock_slot_count": "REI Multiblock item slots"
+}
