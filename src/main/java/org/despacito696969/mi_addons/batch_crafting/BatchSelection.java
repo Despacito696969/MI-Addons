@@ -37,9 +37,9 @@ public class BatchSelection {
     }
 
     public interface BatchCrafterComponent {
-        int MIBatchCraftingAddon$getDesiredRecipeBatching();
-        void MIBatchCraftingAddon$setDesiredRecipeBatching(int batchSize);
-        int MIBatchCraftingAddon$getMaxBatch();
+        int MIAddons$getDesiredRecipeBatching();
+        void MIAddons$setDesiredRecipeBatching(int batchSize);
+        int MIAddons$getMaxBatch();
 
         void MIBatchCraftingAddon$setMaxBatch(int maxBatch);
     }
@@ -52,23 +52,23 @@ public class BatchSelection {
         }
 
         public void changeBatchMode(boolean clickedPlusButton) {
-            int currentBatch = crafter.MIBatchCraftingAddon$getDesiredRecipeBatching();
+            int currentBatch = crafter.MIAddons$getDesiredRecipeBatching();
             if (clickedPlusButton) {
-                currentBatch = Math.min(currentBatch * 2, crafter.MIBatchCraftingAddon$getMaxBatch());
+                currentBatch = Math.min(currentBatch * 2, crafter.MIAddons$getMaxBatch());
             } else {
                 currentBatch = Math.max(currentBatch / 2, 1);
             }
-            this.crafter.MIBatchCraftingAddon$setDesiredRecipeBatching(currentBatch);
+            this.crafter.MIAddons$setDesiredRecipeBatching(currentBatch);
         }
 
         @Override
         public Integer copyData() {
-            return crafter.MIBatchCraftingAddon$getDesiredRecipeBatching();
+            return crafter.MIAddons$getDesiredRecipeBatching();
         }
 
         @Override
         public boolean needsSync(Integer cachedData) {
-            return crafter.MIBatchCraftingAddon$getDesiredRecipeBatching() != cachedData;
+            return crafter.MIAddons$getDesiredRecipeBatching() != cachedData;
         }
 
         @Override
@@ -78,8 +78,8 @@ public class BatchSelection {
 
         @Override
         public void writeCurrentData(FriendlyByteBuf buf) {
-            buf.writeVarInt(crafter.MIBatchCraftingAddon$getDesiredRecipeBatching());
-            buf.writeVarInt(crafter.MIBatchCraftingAddon$getMaxBatch());
+            buf.writeVarInt(crafter.MIAddons$getDesiredRecipeBatching());
+            buf.writeVarInt(crafter.MIAddons$getMaxBatch());
         }
 
         @Override

@@ -24,11 +24,11 @@ public abstract class CrafterComponentMixin implements BatchSelection.BatchCraft
    public int mi_addons$prevEfficiency = 0;
 
    @Unique
-   public int MIBatchCraftingAddon$currentBatchSize = 1;
+   public int MIAddons$currentBatchSize = 1;
    @Unique
-   public int MIBatchCraftingAddon$desiredBatchSize = 1;
+   public int MIAddons$desiredBatchSize = 1;
    @Unique
-   public int MIBatchCraftingAddon$maxBatchSize = 1;
+   public int MIAddons$maxBatchSize = 1;
 
    @Unique
    private static final String CURRENT_BATCH_SIZE_NBT = "currentBatchSize";
@@ -40,60 +40,60 @@ public abstract class CrafterComponentMixin implements BatchSelection.BatchCraft
    @Shadow(remap = false) private int maxEfficiencyTicks;
 
    @Override
-   public int MIBatchCraftingAddon$getDesiredRecipeBatching() {
-      return MIBatchCraftingAddon$desiredBatchSize;
+   public int MIAddons$getDesiredRecipeBatching() {
+      return MIAddons$desiredBatchSize;
    }
 
    @Override
-   public void MIBatchCraftingAddon$setDesiredRecipeBatching(int batchSize) {
-      MIBatchCraftingAddon$desiredBatchSize = batchSize;
+   public void MIAddons$setDesiredRecipeBatching(int batchSize) {
+      MIAddons$desiredBatchSize = batchSize;
    }
 
    @Override
-   public int MIBatchCraftingAddon$getMaxBatch() {
-      return MIBatchCraftingAddon$maxBatchSize;
+   public int MIAddons$getMaxBatch() {
+      return MIAddons$maxBatchSize;
    }
 
    @Override
    public void MIBatchCraftingAddon$setMaxBatch(int max_batch) {
-      MIBatchCraftingAddon$maxBatchSize = max_batch;
+      MIAddons$maxBatchSize = max_batch;
    }
 
    @Inject(method = "updateActiveRecipe", at = @At(value = "HEAD", remap = false), cancellable = true, remap = false)
    private void updateActiveRecipeMixin(CallbackInfoReturnable<Boolean> ci) {
       // Sanity checks, these ifs should never succeed
-      if (MIBatchCraftingAddon$desiredBatchSize > MIBatchCraftingAddon$maxBatchSize) {
-         MIBatchCraftingAddon$desiredBatchSize = MIBatchCraftingAddon$maxBatchSize;
+      if (MIAddons$desiredBatchSize > MIAddons$maxBatchSize) {
+         MIAddons$desiredBatchSize = MIAddons$maxBatchSize;
       }
-      if (MIBatchCraftingAddon$desiredBatchSize < 1) {
-         MIBatchCraftingAddon$desiredBatchSize = 1;
+      if (MIAddons$desiredBatchSize < 1) {
+         MIAddons$desiredBatchSize = 1;
       }
 
       if (efficiencyTicks == 0) {
-         MIBatchCraftingAddon$currentBatchSize = MIBatchCraftingAddon$desiredBatchSize;
+         MIAddons$currentBatchSize = MIAddons$desiredBatchSize;
       }
 
-      if (MIBatchCraftingAddon$currentBatchSize != MIBatchCraftingAddon$desiredBatchSize) {
+      if (MIAddons$currentBatchSize != MIAddons$desiredBatchSize) {
          ci.setReturnValue(false);
       }
    }
 
    @Redirect(method = "updateActiveRecipe", at = @At(value = "INVOKE", remap = false, target = "Laztech/modern_industrialization/machines/recipe/MachineRecipe;getTotalEu()J"), remap = false)
    private long getTotalEuRedirect(MachineRecipe instance) {
-      return instance.getTotalEu() * MIBatchCraftingAddon$currentBatchSize;
+      return instance.getTotalEu() * MIAddons$currentBatchSize;
    }
 
    @ModifyArg(method = "updateActiveRecipe", at = @At(value = "INVOKE", remap = false, target = "Laztech/modern_industrialization/machines/components/CrafterComponent;getRecipeMaxEu(JJI)J"), index = 0, remap = false)
    private long recipeEuModifier(long eu) {
-      return eu * MIBatchCraftingAddon$currentBatchSize;
+      return eu * MIAddons$currentBatchSize;
    }
 
    @Inject(method = "writeNbt", at = @At("TAIL"), remap = false)
    public void writeNbtMixin(CompoundTag tag, CallbackInfo ci) {
-      tag.putInt(CURRENT_BATCH_SIZE_NBT, this.MIBatchCraftingAddon$currentBatchSize);
-      if (this.MIBatchCraftingAddon$maxBatchSize > 1) {
+      tag.putInt(CURRENT_BATCH_SIZE_NBT, this.MIAddons$currentBatchSize);
+      if (this.MIAddons$maxBatchSize > 1) {
          // We don't need to save desiredBatchSize == 1
-         tag.putInt(DESIRED_BATCH_SIZE_NBT, this.MIBatchCraftingAddon$desiredBatchSize);
+         tag.putInt(DESIRED_BATCH_SIZE_NBT, this.MIAddons$desiredBatchSize);
       }
       else {
          // Troll (not really, nbt clean up is very important :gladeline:)
@@ -104,37 +104,37 @@ public abstract class CrafterComponentMixin implements BatchSelection.BatchCraft
    @Inject(method = "readNbt", at = @At("TAIL"), remap = false)
    public void readNbtMixin(CompoundTag tag, CallbackInfo ci) {
       if (tag.contains(CURRENT_BATCH_SIZE_NBT)) {
-         MIBatchCraftingAddon$currentBatchSize = tag.getInt(CURRENT_BATCH_SIZE_NBT);
+         MIAddons$currentBatchSize = tag.getInt(CURRENT_BATCH_SIZE_NBT);
       }
       if (tag.contains(DESIRED_BATCH_SIZE_NBT)) {
-         MIBatchCraftingAddon$desiredBatchSize = tag.getInt(DESIRED_BATCH_SIZE_NBT);
+         MIAddons$desiredBatchSize = tag.getInt(DESIRED_BATCH_SIZE_NBT);
       }
    }
 
 
    @Redirect(method = "takeItemInputs", at = @At(value = "FIELD", remap = false, target = "Laztech/modern_industrialization/machines/recipe/MachineRecipe$ItemInput;amount:I", opcode = Opcodes.GETFIELD), remap = false)
    private int itemInputAmountModifier(MachineRecipe.ItemInput input) {
-      return input.amount * MIBatchCraftingAddon$currentBatchSize;
+      return input.amount * MIAddons$currentBatchSize;
    }
 
    @Redirect(method = "putItemOutputs", at = @At(value = "FIELD", remap = false, target = "Laztech/modern_industrialization/machines/recipe/MachineRecipe$ItemOutput;amount:I", opcode = Opcodes.GETFIELD), remap = false)
    private int itemOutputAmountModifier(MachineRecipe.ItemOutput output) {
-      return output.amount * MIBatchCraftingAddon$currentBatchSize;
+      return output.amount * MIAddons$currentBatchSize;
    }
 
    @Redirect(method = "takeFluidInputs", at = @At(value = "FIELD", remap = false, target = "Laztech/modern_industrialization/machines/recipe/MachineRecipe$FluidInput;amount:J", opcode = Opcodes.GETFIELD), remap = false)
    private long fluidInputAmountModifier(MachineRecipe.FluidInput input) {
-      return input.amount * MIBatchCraftingAddon$currentBatchSize;
+      return input.amount * MIAddons$currentBatchSize;
    }
 
    @Redirect(method = "putFluidOutputs", at = @At(value = "FIELD", remap = false, target = "Laztech/modern_industrialization/machines/recipe/MachineRecipe$FluidOutput;amount:J", opcode = Opcodes.GETFIELD), remap = false)
    private long fluidOutputAmountModifier(MachineRecipe.FluidOutput output) {
-      return output.amount * MIBatchCraftingAddon$currentBatchSize;
+      return output.amount * MIAddons$currentBatchSize;
    }
 
    @Redirect(method = "getRecipeMaxEfficiencyTicks", at = @At(value = "INVOKE", remap = false, target = "Laztech/modern_industrialization/machines/recipe/MachineRecipe;getTotalEu()J"), remap = false)
    private long getTotalEuMixin(MachineRecipe recipe) {
-      return recipe.getTotalEu() * MIBatchCraftingAddon$currentBatchSize;
+      return recipe.getTotalEu() * MIAddons$currentBatchSize;
    }
 
    /**

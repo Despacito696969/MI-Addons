@@ -4,12 +4,14 @@ import aztech.modern_industrialization.machines.BEP;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class BatchCraftingRegistry {
     static public HashMap<String, Integer> machines = new HashMap<>();
-    static public int default_max_batch = 64;
+    static public int defaultMaxBatch = 1;
 
     public static int getBatchSize(BEP bep) {
-        return machines.getOrDefault(BlockEntityType.getKey(bep.type()).toString(), default_max_batch);
+        var name = Objects.requireNonNull(BlockEntityType.getKey(bep.type())).toString();
+        return machines.getOrDefault(name, defaultMaxBatch);
     }
 }

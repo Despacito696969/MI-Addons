@@ -6,21 +6,25 @@ import org.despacito696969.mi_addons.batch_crafting.BatchCraftingRegistry;
 import java.util.HashMap;
 
 public class ModifyMachinesKubeJSEvents extends EventJS {
+    @SuppressWarnings("unused")
     public HashMap<String, Integer> getMachines() {
         return BatchCraftingRegistry.machines;
     }
 
+    @SuppressWarnings("unused")
     public int getDefaultMaxBatch() {
-        return BatchCraftingRegistry.default_max_batch;
+        return BatchCraftingRegistry.defaultMaxBatch;
     }
 
+    @SuppressWarnings("unused")
     public void setDefaultMaxBatch(int batch) {
         if (0 >= batch) {
             throw new IllegalArgumentException("Default max batch " + batch + " is below 1");
         }
-        BatchCraftingRegistry.default_max_batch = batch;
+        BatchCraftingRegistry.defaultMaxBatch = batch;
     }
 
+    @SuppressWarnings("unused")
     public Integer add(String elem, int max_batch) {
         if (elem == null) {
             throw new IllegalArgumentException("Machine name is null");
@@ -31,6 +35,7 @@ public class ModifyMachinesKubeJSEvents extends EventJS {
         return BatchCraftingRegistry.machines.put(elem, max_batch);
     }
 
+    @SuppressWarnings("unused")
     public Integer remove(String elem) {
         if (elem == null) {
             throw new IllegalArgumentException("Machine name is null");
@@ -38,6 +43,7 @@ public class ModifyMachinesKubeJSEvents extends EventJS {
         return BatchCraftingRegistry.machines.remove(elem);
     }
 
+    @SuppressWarnings("unused")
     public Integer get(String elem) {
         if (elem == null) {
             throw new IllegalArgumentException("Machine name is null");
